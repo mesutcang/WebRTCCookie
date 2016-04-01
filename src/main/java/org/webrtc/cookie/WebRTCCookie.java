@@ -1,6 +1,7 @@
 package org.webrtc.cookie;
 
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +14,13 @@ import java.io.PrintWriter;
 public class WebRTCCookie extends HttpServlet{
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
-        out.write("Example servlet 3 annotation example configuration");
+        getServletContext().log("Page is loading.");
+        RequestDispatcher view = req.getRequestDispatcher("form.jsp");
+        view.forward(req, resp);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().write("postingg");
+    }
 }
