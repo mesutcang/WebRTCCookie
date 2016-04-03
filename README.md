@@ -8,4 +8,4 @@ http://www.resiprocate.org/SIP_Over_WebSocket_Cookies
 
 - mvn package
 
-Command will generate a war file so that you can deploy it on a Servlet 3.0 Container. Tomcat is tested but you can use your favourite Java Application Container. Once you deploy the war file, navigate to http://localhost:8080/WebRTCCookie/webrtccookie using your favourite browser.
+Command will generate a war file so that you can deploy it on a Servlet 3.0 Container. Tomcat is tested but you can use your favourite Java Application Container. Once you deploy the war file, navigate to http://localhost/WebRTCCookie/webrtccookie using your favourite browser.
