@@ -22,7 +22,7 @@ import java.security.SignatureException;
 import java.util.Formatter;
 
 @WebServlet("/webrtccookie")
-public class WebRTCCookie extends HttpServlet{
+public class WebRTCCookie extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().log("Page is loading.");
@@ -36,13 +36,13 @@ public class WebRTCCookie extends HttpServlet{
             String proxy_domain = req.getParameter("proxy_domain");
             String time_limit = req.getParameter("time_limit");
             String cookie_value = new StringBuilder().append("1:")
-                                                     .append(System.currentTimeMillis() / 1000L)
-                                                     .append(":")
-                                                     .append(time_limit)
-                                                     .append(":")
-                                                     .append(req.getParameter("sip_from"))
-                                                     .append(":")
-                                                     .append(req.getParameter("sip_to")).append("+").toString();
+                    .append(System.currentTimeMillis() / 1000L)
+                    .append(":")
+                    .append(time_limit)
+                    .append(":")
+                    .append(req.getParameter("sip_from"))
+                    .append(":")
+                    .append(req.getParameter("sip_to")).append("+").toString();
             String extra_value = req.getParameter("extra_value");
             String digest_input = cookie_value + ":" + extra_value;
             String cookie_mac = null;
@@ -56,27 +56,27 @@ public class WebRTCCookie extends HttpServlet{
                 e.printStackTrace();
             }
 
-            Cookie wsSessionInfo = new Cookie("WSSessionInfo", URLEncoder.encode(cookie_value,"utf-8"));
-            wsSessionInfo.setPath("/");
-            wsSessionInfo.setDomain(proxy_domain);
-            wsSessionInfo.setMaxAge(Integer.parseInt(time_limit));
+            Cookie wsSessionInfo = createCookie("WSSessionInfo", cookie_value, proxy_domain, time_limit);
             resp.addCookie(wsSessionInfo);
 
-            Cookie wsSessionExtra = new Cookie("WSSessionExtra", URLEncoder.encode(extra_value,"utf-8"));
-            wsSessionExtra.setPath("/");
-            wsSessionExtra.setDomain(proxy_domain);
-            wsSessionExtra.setMaxAge(Integer.parseInt(time_limit));
+            Cookie wsSessionExtra = createCookie("WSSessionExtra", extra_value, proxy_domain, time_limit);
             resp.addCookie(wsSessionExtra);
 
-            Cookie wsSessionMAC = new Cookie("WSSessionMAC", URLEncoder.encode(cookie_mac,"utf-8"));
-            wsSessionMAC.setPath("/");
-            wsSessionMAC.setDomain(proxy_domain);
-            wsSessionMAC.setMaxAge(Integer.parseInt(time_limit));
+            Cookie wsSessionMAC = createCookie("WSSessionMAC", cookie_mac, proxy_domain, time_limit);
             resp.addCookie(wsSessionMAC);
 
-        }else{
+        } else {
             resp.getWriter().write("You need to provide softphone_link!");
         }
+    }
+
+    private Cookie createCookie(String cookieName, String cookieValue, String domain, String time_limit) throws UnsupportedEncodingException {
+        Cookie cookie = new Cookie( cookieName, URLEncoder.encode(cookieValue, "utf-8") );
+        cookie.setPath("/");
+        cookie.setDomain(domain);
+        cookie.setMaxAge(Integer.parseInt(time_limit));
+
+        return  cookie;
     }
     private final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
